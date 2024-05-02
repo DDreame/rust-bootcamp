@@ -1,20 +1,20 @@
 use anyhow::Result;
 use std::fs::File;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[allow(dead_code)]
-#[derive(Debug, Deserialize)]
-struct Player{
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Player{
     #[serde(rename = "Name")]
-    name: String,
+    pub name: String,
     #[serde(rename = "Position")]
-    position: String,
+    pub position: String,
     #[serde(rename = "DOB")]
-    dob: String,
+    pub dob: String,
     #[serde(rename = "Nationality")]
-    nationality: String,
+    pub nationality: String,
     #[serde(rename = "Kit Number")]
-    number: u8  // u8, u16, u32, u64, u128,
+    pub number: u8  // u8, u16, u32, u64, u128,
 }
 
 fn main() -> Result<()> {
@@ -22,10 +22,25 @@ fn main() -> Result<()> {
     let mut reader = csv::Reader::from_reader(file);
     for result in reader.deserialize(){
         let player: Player = result?;
-        println!("Name: {:?},  Position: {:?},  No.: {:?}",
-        player.name, player.position, player.number);
+        // println!("Name: {:?},  Position: {:?},  No.: {:?}",
+        // player.name, player.position, player.number);
+        println!("{:?}", player.to_json()?)
     }
    
     Ok(())
     
+}
+
+
+impl Player {
+    // &self, &mut self, self
+    pub fn to_json(&self) -> Result<String> {
+        let json = serde_json::to_string(self)?;
+        Ok(json)
+    }
+
+    pub fn from_json(json: &str) -> Result<Player>{
+        let player: Player = serde_json::from_str(json)?;
+        Ok(player)
+    }
 }
