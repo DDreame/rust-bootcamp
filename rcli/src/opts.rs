@@ -14,6 +14,8 @@ pub struct Opts {
 pub enum SubCommand {
     #[command(name = "csv", about = "Show Csv, or convert CSV to Other formats")]
     Csv(CsvOpts),
+    #[command(name = "genpass")]
+    GenPass(GenPassOpts),
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -39,6 +41,24 @@ pub struct CsvOpts {
 
     #[arg(long, default_value_t = true)]
     header: bool,
+}
+
+#[derive(Debug, Parser)]
+pub struct GenPassOpts {
+    #[arg(short, long, default_value = "16")]
+    pub length: u8,
+
+    #[arg(long, default_value = "false")]
+    pub uppercase: bool,
+
+    #[arg(long, default_value = "false")]
+    pub lowercase: bool,
+
+    #[arg(long, default_value = "false")]
+    pub number: bool,
+
+    #[arg(long, default_value = "false")]
+    pub symbol: bool,
 }
 
 fn verify_input_file(filename: &str) -> Result<String, &'static str> {
