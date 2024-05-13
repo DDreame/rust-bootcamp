@@ -1,8 +1,13 @@
 mod base_opts;
 mod csv_opts;
 mod genpass_opts;
+mod text;
 
-pub use {base_opts::Base64Format, base_opts::Base64SubCommand, csv_opts::OutputFormat};
+pub use self::{
+    base_opts::{Base64Format, Base64SubCommand},
+    csv_opts::OutputFormat,
+    text::TextSubCommand,
+};
 
 use clap::Parser;
 use csv_opts::CsvOpts;
@@ -23,6 +28,8 @@ pub enum SubCommand {
     GenPass(GenPassOpts),
     #[command(subcommand)]
     Base64(Base64SubCommand),
+    #[command(subcommand)]
+    Text(TextSubCommand),
 }
 
 fn verify_input_file(filename: &str) -> Result<String, &'static str> {

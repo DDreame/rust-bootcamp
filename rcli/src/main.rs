@@ -26,5 +26,19 @@ fn main() -> anyhow::Result<()> {
             Base64SubCommand::Encode(opt) => process_encode(&opt.input, opt.format),
             Base64SubCommand::Decode(opt) => process_decode(&opt.input, opt.format),
         },
+        SubCommand::Text(subcmd) => match subcmd {
+            rcli::TextSubCommand::Sign(opts) => {
+                {
+                    println!("{:?}", opts);
+                };
+                Ok(())
+            }
+            rcli::TextSubCommand::Verify(opts) => {
+                {
+                    println!("{:?}", opts);
+                };
+                Ok(())
+            }
+        },
     }
 }

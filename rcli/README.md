@@ -2,6 +2,7 @@
 
 Rust 实现的 Cli 项目。
 
+对行为进行编程 而不是对数据结构进行编程。
 
 # CSV Convert
 
@@ -14,3 +15,14 @@ Rust 实现的 Cli 项目。
 # Base64 Encode Decode
 
 主要是学习单元测试
+
+# Text Hash
+
+继承、多态。 trait
+
+# Self TODO
+
+这里记录自己想添加的功能
+
+ - [ ] cli 自动补全
+ - [ ] cli
