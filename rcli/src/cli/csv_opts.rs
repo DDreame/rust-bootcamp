@@ -11,7 +11,7 @@ pub enum OutputFormat {
 
 #[derive(Debug, Parser)]
 pub struct CsvOpts {
-    #[arg(short, long, value_parser=super::verify_input_file)]
+    #[arg(short, long, value_parser=super::verify_file)]
     pub input: String,
 
     #[arg(short, long)] //  default_value = "output.json"

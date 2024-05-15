@@ -13,7 +13,7 @@ pub enum Base64SubCommand {
 
 #[derive(Debug, Parser)]
 pub struct EncodeOpts {
-    #[arg(short, long, value_parser = super::verify_input_file, default_value = "-")]
+    #[arg(short, long, value_parser = super::verify_file, default_value = "-")]
     pub input: String,
 
     #[arg(short, long, value_parser = parse_base64_format, default_value = "standard")]
@@ -22,7 +22,7 @@ pub struct EncodeOpts {
 
 #[derive(Debug, Parser)]
 pub struct DecodeOpts {
-    #[arg(short, long, value_parser = super::verify_input_file, default_value = "-")]
+    #[arg(short, long, value_parser = super::verify_file, default_value = "-")]
     pub input: String,
 
     #[arg(short, long, value_parser = parse_base64_format, default_value = "standard")]

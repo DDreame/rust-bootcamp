@@ -3,9 +3,9 @@
 // rcli text generate-key
 
 use core::fmt;
-use std::str::FromStr;
+use std::{path::PathBuf, str::FromStr};
 
-use super::verify_input_file;
+use super::{verify_file, verify_path};
 use clap::Parser;
 
 #[derive(Debug, Parser)]
@@ -14,28 +14,38 @@ pub enum TextSubCommand {
     Sign(TextSignOpts),
     #[command(name = "verify", about = "")]
     Verify(TextVerifyOpts),
+    #[command(name = "generate-key", about = "")]
+    Generate(TextGenerateKeyOpts),
 }
 
 #[derive(Debug, Parser)]
 pub struct TextSignOpts {
-    #[arg(short, long, value_parser = verify_input_file, default_value = "-")]
+    #[arg(short, long, value_parser = verify_file, default_value = "-")]
+    pub input: String,
+    #[arg(short, long, value_parser = verify_file)]
     pub key: String,
-    #[arg(short, long, value_parser = verify_input_file)]
-    pub text: String,
     #[arg(long, default_value = "blake3", value_parser = parse_format)]
     pub format: TextSignFormat,
 }
 
 #[derive(Debug, Parser)]
 pub struct TextVerifyOpts {
-    #[arg(short, long, value_parser = verify_input_file, default_value = "-")]
+    #[arg(short, long, value_parser = verify_file, default_value = "-")]
+    pub input: String,
+    #[arg(short, long, value_parser = verify_file)]
     pub key: String,
-    #[arg(short, long, value_parser = verify_input_file)]
-    pub text: String,
     #[arg(long, default_value = "blake3", value_parser = parse_format)]
     pub format: TextSignFormat,
     #[arg(short, long)]
     pub sig: String,
+}
+
+#[derive(Debug, Parser)]
+pub struct TextGenerateKeyOpts {
+    #[arg(short, long, default_value = "blake3", value_parser = parse_format)]
+    pub format: TextSignFormat,
+    #[arg(short, long, value_parser = verify_path)]
+    pub output: PathBuf,
 }
 
 #[derive(Debug, Clone, Copy)]

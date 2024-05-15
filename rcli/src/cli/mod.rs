@@ -3,10 +3,12 @@ mod csv_opts;
 mod genpass_opts;
 mod text;
 
+use std::path::{Path, PathBuf};
+
 pub use self::{
     base_opts::{Base64Format, Base64SubCommand},
     csv_opts::OutputFormat,
-    text::TextSubCommand,
+    text::{TextSignFormat, TextSubCommand},
 };
 
 use clap::Parser;
@@ -32,11 +34,20 @@ pub enum SubCommand {
     Text(TextSubCommand),
 }
 
-fn verify_input_file(filename: &str) -> Result<String, &'static str> {
+fn verify_file(filename: &str) -> Result<String, &'static str> {
     if filename == "-" || std::path::Path::new(filename).exists() {
         Ok(filename.into())
     } else {
         Err("File does not exist")
+    }
+}
+
+fn verify_path(path: &str) -> Result<PathBuf, &'static str> {
+    let p = Path::new(path);
+    if p.exists() && p.is_dir() {
+        Ok(p.into())
+    } else {
+        Err("Path does not exist or is not a dir")
     }
 }
 
@@ -45,11 +56,8 @@ mod tests {
     use super::*;
     #[test]
     fn test_verify_input_file() {
-        assert_eq!(
-            verify_input_file("Cargo.toml"),
-            Ok("Cargo.toml".to_string())
-        );
-        assert_eq!(verify_input_file("-"), Ok("-".to_string()));
-        assert_eq!(verify_input_file("no-exist"), Err("File does not exist"));
+        assert_eq!(verify_file("Cargo.toml"), Ok("Cargo.toml".to_string()));
+        assert_eq!(verify_file("-"), Ok("-".to_string()));
+        assert_eq!(verify_file("no-exist"), Err("File does not exist"));
     }
 }
