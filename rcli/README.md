@@ -20,6 +20,14 @@ Rust 实现的 Cli 项目。
 
 继承、多态。 trait
 
+# Http_server
+
+从当前目录构建一个 web server
+
+ - tokio -> 异步处理
+ - hyper, reqwest, axum
+ - tower, tower-http
+
 # Self TODO
 
 这里记录自己想添加的功能
