@@ -28,12 +28,16 @@ Rust 实现的 Cli 项目。
  - hyper, reqwest, axum
  - tower, tower-http
 
+todo:
+ - [ ] 自动生成一个html 展示文件列表
+ - [ ] html 可以增加搜索功能
+
 # Self TODO
 
 这里记录自己想添加的功能
 
  - [ ] cli 自动补全
- - [ ] cli
+ - [ ] cli JWT
 
 
 # 优化相关

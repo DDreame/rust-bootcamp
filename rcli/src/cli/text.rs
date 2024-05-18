@@ -5,6 +5,8 @@
 use core::fmt;
 use std::{path::PathBuf, str::FromStr};
 
+use crate::CmdExecutor;
+
 use super::{verify_file, verify_path};
 use clap::Parser;
 
@@ -18,6 +20,16 @@ pub enum TextSubCommand {
     Generate(TextGenerateKeyOpts),
 }
 
+impl CmdExecutor for TextSubCommand {
+    async fn execute(self) -> anyhow::Result<()> {
+        match self {
+            TextSubCommand::Sign(opts) => opts.execute().await,
+            TextSubCommand::Verify(opts) => opts.execute().await,
+            TextSubCommand::Generate(opts) => opts.execute().await,
+        }
+    }
+}
+
 #[derive(Debug, Parser)]
 pub struct TextSignOpts {
     #[arg(short, long, value_parser = verify_file, default_value = "-")]
@@ -26,6 +38,14 @@ pub struct TextSignOpts {
     pub key: String,
     #[arg(long, default_value = "blake3", value_parser = parse_format)]
     pub format: TextSignFormat,
+}
+
+impl CmdExecutor for TextSignOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let sign = crate::process_sign(&self.input, &self.key, self.format)?;
+        println!("{}", sign);
+        Ok(())
+    }
 }
 
 #[derive(Debug, Parser)]
@@ -40,12 +60,39 @@ pub struct TextVerifyOpts {
     pub sig: String,
 }
 
+impl CmdExecutor for TextVerifyOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let verify = crate::process_verify(&self.input, &self.key, &self.sig, self.format)?;
+        println!("{}", verify);
+        Ok(())
+    }
+}
+
 #[derive(Debug, Parser)]
 pub struct TextGenerateKeyOpts {
     #[arg(short, long, default_value = "blake3", value_parser = parse_format)]
     pub format: TextSignFormat,
     #[arg(short, long, value_parser = verify_path)]
     pub output: PathBuf,
+}
+
+impl CmdExecutor for TextGenerateKeyOpts {
+    async fn execute(self) -> anyhow::Result<()> {
+        let key = crate::process_generate(&self.format)?;
+        // TODO: fix format end process
+        match self.format {
+            TextSignFormat::Blake3 => {
+                let name = self.output.join("blake3-gen.txt");
+                std::fs::write(name, &key[0])?;
+            }
+            TextSignFormat::Ed25519 => {
+                std::fs::write(self.output.join("ed25519.sk"), &key[0])?;
+                std::fs::write(self.output.join("ed25519.pk"), &key[1])?;
+            }
+        }
+        println!("{:?}", key);
+        Ok(())
+    }
 }
 
 #[derive(Debug, Clone, Copy)]
