@@ -32,11 +32,16 @@ todo:
  - [ ] 自动生成一个html 展示文件列表
  - [ ] html 可以增加搜索功能
 
+# JWT Encode/Decode
+
+ - Use Crate: jsonwebtoken
+ - [ ] rcli jwt sign --sub acme --aud device --exp 14d
+ - [ ] rcli jwt verify -t <token-value\>
+
 # Self TODO
 
-这里记录自己想添加的功能
+这里记录待办功能
 
- - [ ] cli 自动补全
  - [ ] cli JWT
 
 
@@ -44,5 +49,7 @@ todo:
 
  - 重构
    - 已有代码进行可以考虑进行泛化
+   - 代码精简、切片
  - 解决问题
    - 写 Unit test
+   -

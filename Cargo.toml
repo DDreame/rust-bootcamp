@@ -1,4 +1,4 @@
 [workspace]
-members = ["rcli"]
+members = [ "concurrency","rcli"]
 resolver = "2" # 暂时不理解
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
