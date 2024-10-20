@@ -22,6 +22,7 @@ fn main() -> Result<()> {
         thread::spawn(move || producer(idx, tx));
     }
 
+    drop(tx);
     let recv = thread::spawn(move || {
         for msg in rx {
             println!("{:?}", msg);
